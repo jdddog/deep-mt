@@ -1,0 +1,13 @@
+data/*
+!data/configs
+!data/thrombectomy-example.csv
+venv
+.venv
+*.pth
+runs
+.idea
+.vscode
+*.egg-info
+*.ods
+*/__pycache__/*
+*/.ipynb_checkpoints/*

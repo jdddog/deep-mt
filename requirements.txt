@@ -1,0 +1,8 @@
+torch==1.13.1+cu117
+monai[itk, tensorboard, pandas, matplotlib]==1.1.0
+scikit-learn==1.2.0
+ray==2.2.0
+SimpleITK==2.2.1
+PyYAML
+cerberus
+natsort

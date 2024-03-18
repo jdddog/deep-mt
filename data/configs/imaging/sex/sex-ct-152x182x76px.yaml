@@ -1,0 +1,47 @@
+# Paths to data
+experiment_name: "sex-ct-152x182x76px"
+csv_path: "../../../thrombectomy-2022-05-26-unique-patients.csv"
+scan_folder: "../../../nii"
+experiments_folder: "../../../experiments"
+
+# Target class we are training and testing for
+target_class: "sex"
+ct_key: "{case_id}_ax_CT.nii.gz"
+ct_mask_key: "{case_id}_ax_CT_combined_bet.nii.gz"
+output_key: "ct_image"
+output_shape: [152, 182, 76] # maximum size that can fit in memory when keeping all dimensions proportional
+# actual image height, width and the max depth for height and width given memory constraints
+transform_name: "deep_mt.transform.make_transforms_legacy"
+transform_kwargs:
+  key: "ct"
+in_channels: 1 # 1 channel for ct
+missing_scans:
+  fill: false
+
+# Model
+model_name: "monai.networks.nets.DenseNet121"
+model_kwargs:
+  spatial_dims: 3
+  in_channels: 1
+  out_channels: 2
+
+# Loss
+loss_name: "torch.nn.CrossEntropyLoss"
+class_weights: true
+
+# Optimiser
+optimiser_name: "torch.optim.Adam"
+optimiser_kwargs:
+  lr: 0.00001
+  weight_decay: 0.0005
+
+# How to split the dataset
+train_ratio: 0.9
+valid_ratio: 0.1
+centre_test_set: "ChCh"
+
+# Random seed for repeatable experiments
+random_seed: 7
+n_epochs: 100
+n_workers: 8
+batch_size: 8

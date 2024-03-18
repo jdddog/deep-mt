@@ -1,0 +1,63 @@
+# Paths to data
+experiment_name: "mrs-ct-cta-1.0x1.0x2.0mm-152x182x76px-fine-tune-squeeze-no-basilars"
+csv_path: "../../thrombectomy-2022-05-26-no-basilars-unique-patients.csv"
+scan_folder: "../../nii"
+experiments_folder: "../../experiments"
+pretrained_weights_path: "../../experiments/weights/mrs-ct-cta-1.0x1.0x2.0mm-152x182x76px-no-basilars_epoch_72.pth"
+
+# Target class we are training and testing for
+target_class: "mrs02_36"
+ct_key: "{case_id}_ax_CT_1.0x1.0x2.0mm_to_scct_unsmooth_SS_0_1.0x1.0x2.0mm_DenseRigid.nii.gz"
+ct_mask_key: "{case_id}_ax_CT_1.0x1.0x2.0mm_to_scct_unsmooth_SS_0_1.0x1.0x2.0mm_DenseRigid_combined_bet.nii.gz"
+cta_key: "{case_id}_ax_A_cropped_to_{case_id}_ax_CT_1.0x1.0x2.0mm_to_scct_unsmooth_SS_0_1.0x1.0x2.0mm_DenseRigid.nii.gz"
+output_key: "ct_cta_image"
+
+features: ["age", "nihss_baseline", "mrs_baseline", "bsl", "onset_to_groin"]
+std_scale: true
+
+# Transforms
+input_shape: [181, 217, 90]
+output_shape: [152, 182, 76]
+transform_name: "deep_mt.transform.make_transforms_mrs_v2"
+transform_kwargs:
+  ct: true
+  cta: true
+  a_min: -13
+  a_max: 83
+  resize: true
+  hu_mean: 8.784554693840347  # for [-13,83] window
+  hu_std: 33.984532815117824  # for [-13,83] window
+  rand_rotate_offset: 0.0872665  # +- 5 * pi/180 rad
+  rand_scale_ratio: 0.1  # +-10%
+
+in_channels: 2 # 1 channel for ct
+missing_scans:
+  fill: false
+
+# Model
+model_name: "deep_mt.hybrid_model.Densenet121TabularHybrid"
+model_kwargs:
+  spatial_dims: 3
+  in_channels: 2
+  out_channels: 2
+
+# Loss
+loss_name: "torch.nn.CrossEntropyLoss"
+class_weights: true
+
+# Optimiser
+optimiser_name: "torch.optim.Adam"
+optimiser_kwargs:
+  lr: 0.0001
+  weight_decay: 0.005
+
+# How to split the dataset
+train_ratio: 0.9
+valid_ratio: 0.1
+centre_test_set: "ChCh"
+
+# Random seed for repeatable experiments
+random_seed: 7
+n_epochs: 200
+n_workers: 10
+batch_size: 8

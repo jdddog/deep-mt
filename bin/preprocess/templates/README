@@ -1,0 +1,5 @@
+Source: https://github.com/muschellij2/ichseg/tree/master/inst
+
+scct_unsmooth_SS_0.01.nii.gz is modified so that background voxels are -1024 HU
+
+Not sure what the licenses of these files are.

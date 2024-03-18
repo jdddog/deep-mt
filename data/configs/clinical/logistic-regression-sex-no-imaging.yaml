@@ -1,0 +1,26 @@
+# Paths to data
+experiment_name: "logistic-regression-sex-no-imaging"
+csv_path: "../../thrombectomy-2022-05-26-unique-patients.csv"
+scan_folder: "../../nii"
+experiments_folder: "../../experiments"
+
+# Target class we are training and testing for
+target_class: "sex"
+
+features: [ "territory", "tpa", "chf", "stroke", "hypertension", "diabetes_mellitus", "dyslipidaemia", "current_or_ex_smoker", "ischaemic_heart_disease", "af", "ethnicity_asian", "ethnicity_european", "ethnicity_maori", "ethnicity_other", "ethnicity_pacific", "vessel_basilar", "vessel_ica", "vessel_m1", "vessel_m2", "side_of_occlusion_b", "side_of_occlusion_l", "side_of_occlusion_r", "nihss_baseline", "mrs_baseline", "aspects", "sbp", "hb", "age", "cr", "onset_to_groin", "bsl" ]
+std_scale: true
+
+# Model
+model_name: "sklearn.linear_model.LogisticRegression"
+model_kwargs:
+  random_state: 7
+missing_scans:
+  fill: false
+
+# How to split the dataset
+train_ratio: 0.9
+valid_ratio: 0.1
+centre_test_set: "ChCh"
+
+# Random seed for repeatable experiments
+random_seed: 7

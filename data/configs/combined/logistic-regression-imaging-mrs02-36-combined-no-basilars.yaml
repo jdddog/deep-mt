@@ -1,0 +1,28 @@
+# Paths to data
+experiment_name: "logistic-regression-imaging-mrs02-36-combined-no-basilars"
+csv_path: "../../thrombectomy-2022-05-26-no-basilars-unique-patients.csv"
+scan_folder: "../../nii"
+experiments_folder: "../../experiments"
+prediction_path: "../../experiments/mrs-ct-1.0x1.0x2.0mm-152x182x76px-no-basilars/mrs-ct-1.0x1.0x2.0mm-152x182x76px-no-basilars-predictions.csv"
+
+# Target class we are training and testing for
+target_class: "mrs02_36"
+
+# Features
+features: ["age", "nihss_baseline", "mrs_baseline", "bsl", "onset_to_groin", "imaging_score"]
+std_scale: true
+
+# Model
+model_name: "sklearn.linear_model.LogisticRegression"
+model_kwargs:
+  random_state: 7
+missing_scans:
+  fill: false
+
+# How to split the dataset
+train_ratio: 0.9
+valid_ratio: 0.1
+centre_test_set: "ChCh"
+
+# Random seed for repeatable experiments
+random_seed: 7

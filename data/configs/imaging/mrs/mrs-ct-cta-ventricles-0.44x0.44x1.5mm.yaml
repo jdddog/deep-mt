@@ -1,0 +1,65 @@
+# Paths to data
+experiment_name: "mrs-ct-cta-ventricles-0.44x0.44x1.5mm"
+csv_path: "../../../thrombectomy-2022-05-26-unique-patients.csv"
+scan_folder: "../../../nii"
+experiments_folder: "../../../experiments"
+
+# Target class we are training and testing for
+target_class: "mrs02_36"
+ct_key: "{case_id}_ax_CT_0.44x0.44x1.0mm_to_scct_unsmooth_SS_0_0.44x0.44x1.0mm_DenseRigid_crop_0.44x0.44x1.5mm.nii.gz"
+ct_mask_key: "{case_id}_ax_CT_0.44x0.44x1.0mm_to_scct_unsmooth_SS_0_0.44x0.44x1.0mm_DenseRigid_combined_bet_crop_0.44x0.44x1.5mm.nii.gz"
+cta_key: "{case_id}_ax_A_cropped_to_{case_id}_ax_CT_0.44x0.44x1.0mm_to_scct_unsmooth_SS_0_0.44x0.44x1.0mm_DenseRigid_crop_0.44x0.44x1.5mm.nii.gz"
+output_key: "ct_cta_image"
+
+# Transforms
+input_shape: [333, 415, 39]
+output_shape: [291, 365, 29] # 29 is minimum. 48 slices selected for ventricles then resized.
+transform_name: "deep_mt.transform.make_transforms_mrs_v2"
+transform_kwargs:
+  ct: true
+  cta: true
+  a_min: -13
+  a_max: 83
+  resize: false # correct size after cropping in z direction
+  hu_mean: 32.73943217712005  # for [-13,83] window
+  hu_std: 23.883669460320515  # for [-13,83] window
+  rand_rotate_offset: 0.0872665  # +- 5 * pi/180 rad
+  rand_scale_ratio: 0.1  # +-10%
+  ventricles: true
+  ventricles_roi_start: [ 21, 25, 5 ]
+  ventricles_roi_end: [ 312, 390, 34 ]
+  rand_trans_x: 21
+  rand_trans_y: 25
+  rand_trans_z: 5
+
+in_channels: 2 # 1 channel for ct
+missing_scans:
+  fill: false
+
+# Model
+model_name: "monai.networks.nets.DenseNet121"
+model_kwargs:
+  spatial_dims: 3
+  in_channels: 2
+  out_channels: 2
+
+# Loss
+loss_name: "torch.nn.CrossEntropyLoss"
+class_weights: true
+
+# Optimiser
+optimiser_name: "torch.optim.Adam"
+optimiser_kwargs:
+  lr: 0.00001
+  weight_decay: 0.0005
+
+# How to split the dataset
+train_ratio: 0.9
+valid_ratio: 0.1
+centre_test_set: "ChCh"
+
+# Random seed for repeatable experiments
+random_seed: 7
+n_epochs: 150
+n_workers: 8
+batch_size: 5

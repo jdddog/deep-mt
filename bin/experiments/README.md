@@ -1,0 +1,1 @@
+Run these scripts from the root of the project, e.g. `./bin/experiments/clinical.sh`
